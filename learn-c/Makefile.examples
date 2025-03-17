@@ -1,0 +1,10 @@
+examples: IntArrayExample
+
+IntArrayLib: IntArray/IntArray.h IntArray/IntArray.c
+	clang -Wall -g -o bin/IntArray.o -c IntArray/IntArray.c
+
+Main: IntArrayExample.c
+	clang -Wall -g -o bin/IntArrayExample.o -c IntArrayExample.c
+
+IntArrayExample: IntArrayLib Main
+	clang -Wall -g -o bin/IntArrayExample bin/IntArray.o bin/IntArrayExample.o

@@ -1,0 +1,2 @@
+/home/avilay/projects/cloned/emsdk/upstream/emscripten/emar qc libsimple.a CMakeFiles/simple.dir/src/blah.c.o
+/home/avilay/projects/cloned/emsdk/upstream/emscripten/emranlib libsimple.a

@@ -1,0 +1,7 @@
+add_executable(App opengl_main.cpp)
+target_link_libraries(App PRIVATE ShapeUtils)
+target_link_libraries(App PRIVATE Glew)
+target_link_libraries(App PRIVATE Glfw)
+target_link_libraries(App PRIVATE ${OPEN_GL_FW})
+target_link_libraries(App PRIVATE ${COCOA_FW})
+target_link_libraries(App PRIVATE ${IOKIT_FW})

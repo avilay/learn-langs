@@ -1,0 +1,3 @@
+opengldemo: app/main.cpp utils/Point.cpp utils/Triangle.cpp
+	clang++ -g app/main.cpp utils/Point.cpp utils/Triangle.cpp -o bin/opengldemo -lglfw.3 -lGLEW.2.1 -framework OpenGL -framework Cocoa -framework IOKit -I.
+	

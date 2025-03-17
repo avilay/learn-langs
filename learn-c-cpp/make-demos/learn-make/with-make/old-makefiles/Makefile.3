@@ -1,0 +1,58 @@
+# Here we see four builtin macros used by the make utility - %, $@, $<, and $^.
+# %.<ext> - When faced with a token abc.<ext>, make will replace %.<ext> with abc.<ext>
+# $@ - The target name, or more precisely everything to the left of :
+# $< - The first item in the dependencies list
+# $^ - All the dependencies, or precisely everything to the right of :
+
+# First lets look at opengldemo target. It depends on other targets that look like file paths but are
+# just targets. make utility sees that these end in .o and knows that all targets ending in .o
+# are defined as %.o. All targets of this type depend on the corresponding .cpp file and whatever
+# is defined in the DEPS marcro. So if it is trying to find app/main.o target it will construct
+# the following rule:
+# app/main.o: app/main.cpp utils/Point.h utils/Triangle.h
+# 	<command here>
+
+# That is the substituion that % does.
+
+# Now why have the DEPS macro? None of my compiling and linking commands actually need the header
+# files. But this is to tell the make file that if these files change, rebuild the targets that
+# "depend" on them.
+
+# $@ macro is replaced with the target name, or more strictly everything to the left of the :. In
+# this case it will be replaced with app/main.o. With this clever trick we tell the make utility
+# that we want the output to be the same as the target name. Now the target becomes:
+# app/main.o: app/main.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o app/main.o $<
+
+# $< macro is replaced by the first item in the dependencies list. So the full target becomes:
+# app/main.o: app/main.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o app/main.o app/main.cpp
+
+# The full Makefile after all the macro replacements is equivalent to -
+
+# app/main.o: app/main.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o app/main.o app/main.cpp
+
+# utils/Point.o: utils/Point.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o utils/Point.o utils/Point.cpp
+
+# utils/Triangle.o: utils/Triangle.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o utils/Triangle.o utils/Triangle.cpp
+
+# Finally the $^ is just everything to the right of the : in the target definition. So the
+# opengldemo target becomes:
+# opengldemo: app/main.o utils/Point.o utils/Triangle.o
+# 	clang++ -o bin/opengldemo ... app/main.o utils/Point.o utils/Triangle.o
+
+# But now we have littered our entire source structure with .o files. To see how to fix this
+# see Makefile.4.
+
+CC=clang++
+CFLAGS=-I.
+DEPS=utils/Point.h utils/Triangle.h
+
+%.o: %.cpp $(DEPS)
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+opengldemo: app/main.o utils/Point.o utils/Triangle.o
+	$(CC) -o bin/opengldemo -lglfw.3 -lGLEW.2.1 -framework OpenGL -framework Cocoa -framework IOKit $^

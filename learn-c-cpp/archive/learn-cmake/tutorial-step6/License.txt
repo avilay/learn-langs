@@ -1,0 +1,1 @@
+This is the license file for my super awesome square root calculator.

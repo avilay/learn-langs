@@ -1,0 +1,38 @@
+# The first target is the default target for make, i.e., will be executed when `make` is called
+# without any arguments. So lets keep the first target as the opengldemo target.
+# The targetnames are just strings. They don't have any meaning outside this make file. E.g.,
+# I could've called opengldemo target myawesomeapp target and it would still have outputted
+# bin/opengldemo ELF. With that in mind we can see that opengldemo target depends on three
+# other targets - main.o, point.o, and triangle.o. Again these could've been called anything.
+
+# So the make utility will go looking for `main.o:` in this file. Upon finding it will see that
+# it actually depends on files and not other targets. So it will check if this file has changed.
+# If so, it'll build this target. The build step here is simply executing the command given. It
+# will not try to do anything smart apart from substituting the macros. As such it will execute
+# `clang++ -c -I. -o bin/main.o app/main.cpp`
+# The clang++ utility will now choose to execute `clang` tool to compile this file.
+
+# Similarly it will then build the targets point.o and triangle.o by executing -
+# `clang++ -c -o bin/Point.o utils/Point.cpp`
+# `clang++ -c -o bin/Triangle.o utils/Triangle.cpp`
+# which in turn will use the `clang` tool. Notice how my output files are quite dissimilar
+# from my target names.
+
+# Now the make utility comes back to the opengldemo target and executes the following command:
+# `clang++ -o bin/opengldemo -lglfw.3 -lGLEW.2.1 -framework Cocoa -framework IOKit -framework OpenGL bin/main.o bin/Point.o bin/Triangle.o`
+# The clang++ utility will execute the linker tool ld for this step.
+
+CC=clang++
+CFLAGS=-I.
+
+opengldemo: main.o point.o triangle.o
+	$(CC) -o bin/opengldemo -lglfw.3 -lGLEW.2.1 -framework OpenGL -framework Cocoa -framework IOKit bin/main.o bin/Point.o bin/Triangle.o
+
+point.o: utils/Point.cpp
+	$(CC) -c -o bin/Point.o utils/Point.cpp
+
+triangle.o: utils/Triangle.cpp
+	$(CC) -c -o bin/Triangle.o utils/Triangle.cpp
+
+main.o: app/main.cpp
+	$(CC) -c $(CFLAGS) -o bin/main.o app/main.cpp

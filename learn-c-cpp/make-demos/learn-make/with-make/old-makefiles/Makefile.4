@@ -1,0 +1,21 @@
+# Lets take all the concepts learned so far and put them together.
+
+CC=clang++
+CFLAGS=-I.
+DEPS=utils/Point.h utils/Triangle.h
+ODIR=obj
+OBJ=$(ODIR)/utils/Point.o $(ODIR)/utils/Triangle.o $(ODIR)/app/main.o
+LIBS=-lglfw.3 -lGLEW.2.1
+FWORKS=-framework OpenGL -framework Cocoa -framework IOKit
+
+# For utils/Point.o this is replaced with -
+# obj/utils/Point.o: utils/Point.cpp utils/Point.h utils/Triangle.h
+# 	clang++ -c -I. -o obj/utils/Point.o utils/Point.cpp
+$(ODIR)/%.o: %.cpp $(DEPS)
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+# This is replaced with -
+# opengldemo: obj/utils/Point.o obj/utils/Triangle.o obj/app/main.o
+# 	clang++ -o bin/opengldemo ... obj/utils/Point.o obj/utils/Triangle.o obj/app/main.o
+opengldemo: $(OBJ)
+	$(CC) -o bin/$@ $(LIBS) $(FWORKS) $^

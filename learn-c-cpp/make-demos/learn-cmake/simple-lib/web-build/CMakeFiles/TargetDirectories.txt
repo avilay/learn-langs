@@ -1,0 +1,7 @@
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/simple.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/edit_cache.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/rebuild_cache.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/list_install_components.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/install.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/install/local.dir
+/home/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/make-demos/learn-cmake/simple-lib/web-build/CMakeFiles/install/strip.dir

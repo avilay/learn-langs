@@ -1,0 +1,63 @@
+https://en.cppreference.com/w/cpp/io/manip
+
+Sets whether `true` and `false` will show up as "true" and "false" or 1 and 0. In general a good setting to have as default.
+    boolalpha
+    noboolalpha
+
+Will print a leading 0x or 0 for hex and oct numbers when used in conjuction with hex or oct formatters. Good to set it as default.
+    showbase
+    noshowbase
+
+Should 1 be printed as 1.0? Good to set when doing numeric stuff, but not default.
+    showpoint
+    noshowpoint
+
+Should 1 be printed as +1?
+    showpos
+    noshowpos
+
+Used to control wheter leading whitespace should be stripped for inputs.
+    skipws
+    noskipws
+
+Should a hex number be printed as 0x2a or 0X2A? Should scientific notation be printed as 1e-10 or 1E-10?
+    uppercase
+    nouppercase
+
+Should output buffer be flused on every output?
+    unitbuf
+    nounitbuf
+
+Used in conjunction with setfill/setw, determines whether the output is padded from the left or right.
+    internal
+    left
+    right
+
+Changes the base for integer I/O. Useful for printing out numbers in non-decimal format.
+    dec
+    hex
+    oct
+
+Controls how floating point numbers are printed.
+    fixed => 0.000100 (only does 6 digits after decimal)
+    scientific => 1.0e-4
+    hexfloat => duh?
+    defaultfloat => 0.0001
+
+Strips leading whitespace from inputs.
+    ws
+
+Outputs NULL
+    ends
+
+Flushes the output stream.
+    flush
+
+Outputs NULL and flushes the output stream.
+endl
+
+Exactly how numpy.set_printoptions works.
+    setprecision
+
+Adds padding.
+    setw

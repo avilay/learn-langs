@@ -1,0 +1,11 @@
+scratch: scratch.h scratch.c
+	clang -Wall -g -c -o bin/scratch.o scratch.c
+
+main: main.c
+	clang -Wall -g -c -o bin/main.o main.c
+
+app: scratch main
+	clang -Wall -g -o bin/app bin/scratch.o bin/main.o
+
+run: app
+	bin/app
