@@ -1,0 +1,103 @@
+2014-11-03 12:36:28,542:INFO:__main__:Starting
+2014-11-03 12:36:28,542:INFO:cookie:Starting to bake 5 cookies.
+2014-11-03 12:36:28,542:ERROR:cookie:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/cookie.py", line 8, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+2014-11-03 12:36:28,542:INFO:__main__:Done
+2014-11-03 12:43:01,665:ERROR:desserts.ladoo:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+2014-11-03 12:44:28,604:ERROR:desserts.ladoo:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+
+
+
+
+
+
+
+
+2014-11-03 12:45:52,263:ERROR:desserts.ladoo:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+
+
+
+
+
+
+2014-11-03 12:50:11,246:INFO:__main__:Starting
+2014-11-03 12:50:11,247:INFO:desserts.ladoo:Starting to bake 3 ladoo.
+2014-11-03 12:50:11,247:ERROR:desserts.ladoo:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+2014-11-03 12:50:11,247:INFO:__main__:Done
+2014-11-03 12:52:52,402:ERROR:desserts.ladoo:Oops! something went wrong! 
+Traceback (most recent call last):
+  File "/home/avilay/Dropbox/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+IOError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+2017-09-11 14:33:52,939:ERROR:desserts.ladoo:Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:35:49,637", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:36:51,109", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:38:25,607", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:39:14,303", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:39:43,807", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:41:12,007", "level": "INFO", "module": "__main__", "message": "Starting"}
+{"timestamp": "2017-09-11 14:41:12,007", "level": "INFO", "module": "desserts.ladoo", "message": "Starting to bake 3 ladoo."}
+{"timestamp": "2017-09-11 14:41:12,007", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/Dropbox/learn/learn-python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2017-09-11 14:41:12,007", "level": "INFO", "module": "__main__", "message": "Baked"}
+{"timestamp": "2018-06-06 15:37:29,650", "level": "INFO", "module": "__main__", "message": "Starting"}
+{"timestamp": "2018-06-06 15:37:29,650", "level": "INFO", "module": "desserts.ladoo", "message": "Starting to bake 3 ladoo."}
+{"timestamp": "2018-06-06 15:37:29,650", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/projects/learn/python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2018-06-06 15:37:29,651", "level": "INFO", "module": "__main__", "message": "Baked"}
+{"timestamp": "2018-06-06 15:38:27,563", "level": "INFO", "module": "desserts.ladoo", "message": "Starting to bake 3 ladoo."}
+{"timestamp": "2018-06-06 15:38:27,564", "level": "ERROR", "module": "desserts.ladoo", "message": "Oops! something went wrong! [Errno 2] No such file or directory: 'nonexistantfile.txt'"}
+Traceback (most recent call last):
+  File "/Users/avilay/projects/learn/python/logging/desserts/ladoo.py", line 11, in bake
+    f = open('nonexistantfile.txt')
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistantfile.txt'
+{"timestamp": "2018-06-06 15:38:27,565", "level": "INFO", "module": "__main__", "message": "Baked"}
