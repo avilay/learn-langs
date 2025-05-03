@@ -224,6 +224,10 @@ Value of ptr: 0x7ffe846ab98c
 Value pointed by ptr: 10
 ```
 
+Here is how I like to visualize arrays and pointers -
+
+![array_ptr_visualization](./imgs/array_ptr_visualization.png)
+
 ## Pointer Arithmetic
 
 See Vectors and Arrays.

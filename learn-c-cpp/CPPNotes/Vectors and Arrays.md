@@ -585,7 +585,7 @@ ary = { 100, 200, 300 };  // ERROR: C-style arrays don't support assignment.
 
 Arrays are allocated a contiguous chunk of memory divided up in blocks where each block is the size of the containing element. I can have a pointer point to the first element of the array. Incrementing or decrementing a pointer works in blocks. The block size is whatever is the size of the element being pointed to is. That way the pointer is always pointing to a single element from the beginning of its entry. Assuming ints are 4 bytes -
 
-![ptr_arithmetic](/Users/avilay/projects/bitbucket/learn/learn-lang/learn-c-cpp/CPPNotes/imgs/ptr_arithmetic.png)
+![ptr_arithmetic](./imgs/ptr_arithmetic.png)
 
 Thus `*(ptr + n)` $\equiv$ `ary[n]` where `int* ptr { ary }`. 
 
