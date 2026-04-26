@@ -26,6 +26,8 @@ Returning type is
 */
 
 fn bad_func_1(x: &str) -> &str {
+    // These two will not compile because the string object is owned by this
+    // function and I am trying to borrow it
     // let ans = String::from("Too long Too short");
     // let ans = &String::from("Too long Too short")[..];
     let ans = "Too long Too short";
@@ -50,4 +52,6 @@ fn bad_func_1(x: &str) -> &str {
 
 fn main() {
     // func1_demo();
+    let ans = bad_func_1("Hello, world! How are you?");
+    println!("{ans}");
 }
