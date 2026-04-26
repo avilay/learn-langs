@@ -186,7 +186,7 @@ int main()
 
 ### Predefined Pointer-Related types
 
-* `size_t`: Created to provide a safe type for sizes. This is an unsigned integer type. It should be used array indexes, loop counters, and occasionally for pointer arithmetic. It is best to use the `%zu` or `%lu` format specifier to print it.
+* `size_t`: Created to provide a safe type for sizes. This is an unsigned integer type. It should be used for array indexes, loop counters, and occasionally for pointer arithmetic. It is best to use the `%zu` or `%lu` format specifier to print it.
 * `ptrdiff_t`: Created to handle pointer arithmetic.
 * `intptr_t` and `uintptr_t`: Used for storing pointer addresses.
 
