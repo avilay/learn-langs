@@ -1,6 +1,6 @@
 # Functors
 
-A useful typeclass for type constructors is `Functor`. It has a single method `fmap` that takes a function and a container, yanks the value out of the container, applies the function, and wraps the resulting back into a container.
+A useful typeclass for type constructors is `Functor`. It has a single method `fmap` that takes a function and a container, yanks the value out of the container, applies the function, and wraps the result back into a container.
 
 ![fmap](./fmap.png)
 

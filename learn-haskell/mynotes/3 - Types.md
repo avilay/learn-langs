@@ -1,122 +1,76 @@
 # Types
 
-## Even Shorter Summary
-
-```haskell
--- newtype
-newtype ModelId = ModelId Int
-newtype Health = Health { remainingHealth :: Int }
-
--- record type
-data Point = Point {x :: Integer, y :: Integer}
-
--- type constructor, e.g., Maybe, Either
-data Node a = EmptyNode | Node {value :: a, next :: Node a}
-
--- concrete typeclass, e.g., Eq, Num, Ord, Show
-class Distinct a where
-  distance :: a -> a -> Float
-  
--- use it as a constraint
-speed :: (Distinct a) => a -> a -> Float -> Float
-speed x0 x1 t = distance x1 x0 / t
-
--- concrete kinds can be instances of this typeclass
-instance Distinct String where
-  distance str1 str2 = ...
-  
-instance Distinct Point where
-  distance point1 point2 = ...
-
--- implemented for concrete kind (Node a)
-instance Distinct (Node a) where
-  distance node1 node2 = ...
-
--- instances can have constraints of their own
-instance Eq a => Distinct (Node a) where
-  distance (Node val1 next1) (Node val2 next2) = ...
-
--- typeclasses can have also have constraints called "superclass"
-class (Eq a) => Sequence a where
-  cardinality :: a -> Int
-  
--- typeclass for type constructors  
-class Singleton f where
-	singleton :: a -> f a
-
--- implemented for type constructor kind Node
-instance Singleton Node where
-	singleton val = Node val EmptyNode  
-```
-
 ## Summary
 
 ```haskell
--- TYPE
-x = True
+-- VALUES
+x = 10
 :t x
-> x :: Bool
-
--- KIND
-:k Bool
-> Bool :: *
+> x :: Int
 
 -- NEWTYPE
-newtype ModelId = ModelId Int
-newtype Health = Health { remainingHealth :: Int }
+newtype ModelId = ModelId Integer
+newtype Health = Health {remainingHealth :: Integer}
+mid = ModelId 10
+health = Health {remainingHealth=100}
+remainingHealth health
+> 10
 
--- DATA TYPE
+:t mid
+> t :: ModelId
+:k ModelId
+> ModelId :: *
+
+-- NULLARY types
+data Color = Red | Green | Blue
+
+-- SUM types
+data Result = Error String | Ok Integer
+
+-- DATA TYPE aka PRODUCT TYPE aka RECORD
 data Point = Point {x :: Integer, y :: Integer}
 origin = Point 0 0
+i = Point {x=1, y=0}
 
--- type of origin is Point
 :t origin
 > origin :: Point
-
--- kind of Point is a concrete type *
 :k Point
 > Point :: *
 
--- PARAMETRIC DATA TYPE aka TYPE CONSTRUCTORS
+-- COMBINATION (Sum and Product) type
+data Shape
+  = Circle {center :: Point, radius :: Float}
+  | Rectangle {upperLeft :: Point, lowerRight :: Point}
+  deriving (Show)
+
+-- All the above types are of kind * (concrete)
+
+-- PARAMETERIC DATA TYPE
+-- Think of this type as a container or a collection of other types
 data Node a = EmptyNode | Node {value :: a, next :: Node a}
 head = Node 'A' (Node 'B' EmptyNode)
-
--- type of head is (Node Char)
 :t head
 > head :: Node Char
-
--- kind of (Node Char) is a concrete type *
 :k Node Char
 > Node Char :: *
-
--- kind of Node is a type constructor that takes a concrete type
--- to another concrete type
 :k Node
 > Node :: * -> *
+-- Node Char is of kind concrete
+-- Node is of kind type constructor
 
--- Maybe and Either are commonly used built-in parameteric types
-
--- PARAMETERIZED POLYMORPHIC FUNCTION
-reverse :: [a] -> [a]
-reverse list = ...
-
--- TYPECLASS FOR CONCRETE TYPES
--- typeclass is always parametric with a concrete type as the param
+-- TYPECLASS for **concrete types**
 class Distinct a where
-  distance :: a -> a -> Float
-
--- kind of a typeclass is a function that takes a concrete type to Constraint.
-ghci> :k Distinct
-Distinct :: * -> Constraint
-
--- Acts as constraint on polymorphic functions
+	distance :: a -> a -> Float
+	
+-- Acts as a Constraint on polymorphic functions
 speed :: (Distinct a) => a -> a -> Float -> Float
 speed x0 x1 t = distance x1 x0 / t
 
--- Eq, Num, Ord, Show, Read, and Foldable are commonly used builtin typeclass for concrete types
--- Semigroup and Monoid are simple builtin typeclasses for concrete types
+:k Distinct
+> Distinct :: * -> Constraint
+-- Distinct is of kind "constraint constructor" (?)
 
--- Concrete data types can implement these typeclasses
+-- Concrete types can implement these typeclasses
 instance Distinct String where
   distance str1 str2 = ...
   
@@ -127,29 +81,10 @@ instance Distinct Point where
 instance Distinct (Node a) where
   distance node1 node2 = ...
 
--- the instances themselves can have constraints
--- I am going to use val1 == val2 in the implementation below
-instance Eq a => Distinct (Node a) where
-  distance (Node val1 next1) (Node val2 next2) = ...
-  
--- typeclasses can have super class, which is just a constraint at the class 
--- definition level
-class (Eq a) => Sequence a where
-  cardinality :: a -> Int
-  
--- Eq is a super class for Ord
--- Semigroup is a super class for Monoid  
-ghci> :k Distinct
-Distinct :: * -> Constraint
-ghci> :k Eq
-Eq :: * -> Constraint
-ghci> :k Ord
-Ord :: * -> Constraint
-
--- TYPECLASS FOR TYPE CONSTRUCTORS
+-- TYPECLASS for **type constructors**
 class Singleton f where
 	singleton :: a -> f a
-
+	
 -- kind of this typeclass is a function that takes a type constructor to a Constraint.
 ghci> :k Singleton
 Singleton :: (* -> *) -> Constraint
@@ -163,17 +98,126 @@ instance Singleton Maybe where
   
 singleton 10 :: Node Int  
 singleton 10 :: Maybe Int
-
--- Functor is a common typeclass for type constructors
-ghci> :k Functor
-Functor :: (* -> *) -> Constraint
 ```
+
+Colloquially: `x` is an `Integer`.
+
+CS: The **VALUE** `x` is of **TYPE** `Integer`.
+
+Colloquially: `Integer` is a `* (concrete)` type.
+
+CS: The **TYPE** `Integer` is of **KIND** `* (concrete)`.
+
+There are other types like new types (created with the keyword `newtype`), record types (created with the keyword `data`), etc. There are also other kinds like type constructors, constraint constructors, etc.
+
+| Value    | Type                                            | Kind                        |
+| -------- | ----------------------------------------------- | --------------------------- |
+| `x`      | `Integer`                                       | `*`                         |
+| `origin` | `Point`                                         | `*`                         |
+| `head`   | `Node Char`                                     | `*`                         |
+|          | `Node a` (parameteric data type)                | `* -> *` (type constructor) |
+|          | `Distinct a` (typeclass for concrete types)     | `* -> Constraint`           |
+|          | `Singleton f` (typeclass for type constructors) | `(* -> *) -> Constraint`    |
+
+* `Maybe` and `Either` are a couple of commonly used parameteric types.
+
+* Think of both types of typeclasses as interfaces. 
+
+  * `Eq`, `Num`, `Ord`, `Show`, `Read`, `Foldable` are commonly used typeclasses for concrete types.
+
+  * Just like interfaces can be implemented by different classes, different concrete types (or type constructors) can instantiate a typeclass.
+
+  * Just like interfaces in other languages are used in function signatures to provide an "upper bound" for the function parameter, typeclasses in Haskell are used to constrain function parameters (see the `speed` function above). 
+
+  * In addition to functions, constraints can be added when instantiating a typeclass as well as to the definition of the typeclass itself. (Adding the constraint function for completion)
+
+    ```haskell
+    -- Acts as a Constraint on polymorphic functions
+    speed :: (Distinct a) => a -> a -> Float -> Float
+    speed x0 x1 t = distance x1 x0 / t
+    
+    -- I am going to use val1 == val2 in the implementation below
+    instance Eq a => Distinct (Node a) where
+      distance (Node val1 next1) (Node val2 next2) = ...
+      
+    -- Constraint on the typeclass itself is called a "superclass".  
+    class (Eq a) => Sequence a where
+      cardinality :: a -> Int
+    ```
+
+* There are two types of polymorphisms in functional programming -
+
+  * Parameteric polymorphism is like generic functions, where functions behave in the same way regardless of the type of input parameters.
+
+    ```haskell
+    -- PARAMETERIZED POLYMORPHIC FUNCTION
+    reverse :: [a] -> [a]
+    reverse list = ...
+    
+    -- reverse behaves the same way for all types of lists
+    reverse [1, 2, 3]
+    reverse ['A', 'B', 'C']
+    ```
+
+  * Ad-hoc polymorphism is like traditional OO polymorphism, where the same function behaves differently depending on the type input parameters.
+
+    ```haskell
+    class Distinct a where
+    	distance :: a -> a -> Float
+    	
+    -- Concrete types can implement these typeclasses
+    instance Distinct String where
+      distance str1 str2 = ...
+      
+    instance Distinct Point where
+      distance point1 point2 = ...
+      
+    -- Gives the Euclidian distance for Points
+    distance (Point 1 0) (Point 0 1)
+    
+    -- Gives the Hamming distance for Strings
+    distance "AB" "BB"
+    ```
+
+* Ways of calling a function that takes in a complex type -
+
+  ```haskell
+  -- distance :: Point -> Point -> Float
+  
+  -- Using variables
+  ivec = Point 1 0
+  jvec = Point 0 1
+  distance ivec jvec
+  
+  -- Using inline constructors
+  distance (Point 1 0) (Point 0 1)
+  
+  -- Using inline named constructors
+  distance (Point {x=1, y=0}) (Point {x=0, y=1})
+  ```
+
+* Ways of defining a function that takes in a complex type -
+
+  ```haskell
+  distance :: Point -> Point -> Float
+  
+  -- Using constructors
+  distance (Point x1 y1) (Point x2 y2) = sqrt ((y2 - y1)^2 + (x2 - x1)^2)
+  
+  -- Using variables
+  distance p1 p2 = 
+  	let x1 = x p1
+  	    y1 = y p1
+  	    x2 = x p2
+  	    y2 = y p2
+  	 in sqrt ((y2 - y1)^2 + (x2 - x1)^2)
+  ```
 
 ## Types and Kinds
 
-All expressions evaluate to some value that belongs to some **type**. E.g., `x + y` will evaluate to `7` (say), `7` is a **type of** `Integer`, written as `7 :: Integer`. Types in turn belong to a **kind**, e.g., `Integer` is a **kind of** concrete type, represented in Haskell as `*`. Functions being a first class concept in Haskell, they also have a type which is their function signature. E.g., `add x y = x + y` is a type of function that maps a number to a number to a number, i.e, `add :: Num a => a -> a -> a`. The weird `Num a => ` syntax will be clear after learning about ad-hoc polymorphic functions inside typeclasses.
+All expressions evaluate to some **value** that belongs to some **type**. E.g., `x + y` will evaluate to `7` (say), `7` is a **value** of **type** `Integer`, written as `7 :: Integer`. Types in turn belong to a **kind**, e.g., `Integer` is a **kind** of concrete type, represented in Haskell as `*`. Functions being a first class concept in Haskell, also have a type which is their function signature, e.g., `add x y = x + y` is a type of function that maps a number to a number to a number, i.e., `add :: Num a => a -> a -> a`. The weird `Num a =>` syntax will become clear after learning about typeclasses and ad-hoc polymorphism. For now, think of it as type `a` can be anything that implements the `Num` interface.
 
-I can find the type of an expression using `:t`  and the kind using `:k` in GHCI -
+I can find the type of an expression using `:t` and its kind using `:k` in GHCI -
 
 ```haskell
 ghci> isActive = True
@@ -183,101 +227,131 @@ ghci> :k Bool
 Bool :: *
 ```
 
-Oftentimes it is useful to use `:info` to get full information on either.
-
 ## Concrete Types
 
 ### Type Alias
 
-This is same as `typedef` in C. 
+This is the same as `typedef` in C.
 
 ```haskell
-type ModelId = Int
+type ModelId = Integer
 
-deploy :: ModelId -> Int -> String
-deploy (ModelId modelId) numShards = "Deploying model " ++ show modelId ++ " on " ++ show numShards ++ " shards."
+deploy :: ModelId -> Integer -> String
+deploy modelId numShards = "Deploying model " ++ show modelId ++ " on " ++ show numShards + " shards."
 
-ghci> model = 10
-ghci> shards = 3
+ghci> model = 10 :: ModelId
+ghci> shards = 3 :: Integer
 ghci> deploy model shards
 "Deploying model 10 on 3 shards."
 ```
 
-But there is no compile time checking of this, I can always do this -
+But there is no compile time checking of this, I can always do -
 
 ```haskell
 ghci> deploy shards model
 "Deploying model 3 on 10 shards."
 ```
 
-and it will still compile and run.
+> I am specifying the type along with variable declaration to disambiguate `10`, by default it will be of type `Num a => a`. 
 
 ### `newtype`s
 
-A slight improvement on type aliases where compile time type checking is available. There are also some performance benefits of using `newtype`.
+Newtypes are a slight improvement on type aliases because they benefit from compile time type checking. There are also some performance benefits in using newtypes.
 
 ```haskell
-newtype ModelId = ModelId Int deriving (Show)
+newtype ModelId = ModelId Integer deriving (Show)
 
-deploy :: ModelId -> Int -> String
+deploy :: ModelId -> Integer -> String
 deploy modelId numShards = "Deploying model " ++ show modelId ++ " on " ++ show numShards ++ " shards."
+
+ghci> model = ModelId 10
+ghci> replicas = 10 :: Integer
+ghci> deploy model replicas
+"Deploying model ModelId 10 on 10 shards."
+ghci> deploy replicas model
+
+<interactive>:4:8: error: [GHC-83865]
+• Couldn't match expected type ‘ModelId’ with actual type ‘Integer’
+• In the first argument of ‘deploy’, namely ‘replicas’
+In the expression: deploy replicas model
+In an equation for ‘it’: it = deploy replicas model
+
+<interactive>:4:17: error: [GHC-83865]
+• Couldn't match expected type ‘Integer’ with actual type ‘ModelId’
+• In the second argument of ‘deploy’, namely ‘model’
+In the expression: deploy replicas model
+In an equation for ‘it’: it = deploy replicas model
 ```
 
-```Haskell
--- there is compile time checking 
-$ ghc -Wall Main.hs -o ~/temp/bin/scratch
-[1 of 2] Compiling Main             ( Main.hs, Main.o ) [Source file changed]
-
-Main.hs:19:31: error:
-    • Couldn't match expected type ‘Integer’ with actual type ‘ModelId’
-    • In the second argument of ‘deploy’, namely ‘modelId’
-      In the expression: deploy numShards modelId
-      In an equation for ‘repr’: repr = deploy numShards modelId
-   |
-19 |       repr = deploy numShards modelId
-   |                               ^^^^^^^
-```
-
-Ignore the details of `deriving (Show)` for now. Know that it is like getting an automatic implementation of the Python equivalent of `__repr__`, in that it makes this type printable.
-
-There are two ways I can call `deploy` with `ModelId` -
+Ignore the details of `deriving (Show)` for now. Think of it like getting an automatic implementation of the Python equivalent of `__repr__` , in that it stringifies the data. First off, notice how line #6 in the example above is different from line #6 of the type alias example. 
 
 ```haskell
--- Instantiating model id beforehand
-ghci> mid = ModelId 10
-ghci> deploy mid 16
-"Deploying model ModelId 10 on 16 shards."
+-- When ModelId is a type alias
+modelId = 10 :: ModelId
 
--- Instantiating model id while calling the function
-ghci> deploy (ModelId 10) 16
-"Deploying model ModelId 10 on 16 shards."
+-- When ModelId is a newtype
+modelId = ModelId 10
 ```
 
-With type aliases I could declare a variable like `model = 10` but with newtypes I have to use the type constructor `model = ModelId 10`. The type constructor must have the same name as the type for newtypes. Furthermore, there can only be one property on this type. 
-
-In the above function definition of `deploy`, I did not need to "pull" out the model ID contained inside the `ModelId` datatype so I was able to define the function as I did - `deploy modelId shards = ...`. However if there is a scenario where I do need to pull the contained value out, I'll have to define my function in terms of the constructor.
+Here I am using the "constructor" for `ModelId` to create the object, not just "casting" the value to an `Integer`. I can use the constructor directly in the function call like so -
 
 ```haskell
-newtype Offset = Offset Int
-
-write :: Int -> Offset -> String -> String
-write base (Offset offset) msg = replicate (base + offset) ' ' ++  msg
+deploy (ModelId 10) 3
 ```
 
-Defining this function as `write base offset msg = ...` will not work. I can make the property a named property in the manner of the so-called *record types* discussed later, which will make it easy to pull out the contained data.
+In the line -
 
 ```haskell
-newtype ModelId = ModelId {mid :: Int}
-
-deploy :: ModelId -> Int -> String
-deploy model numShards = "Deploying model " ++ show (mid model) ++ " on " ++ show numShards ++ " shards."
+newtype ModelId = ModelId Integer
 ```
 
-I can now "pull out" the id from the `ModelId` object using this getter like so `mid model` where `model :: ModelId`. This is what I am doing in the function implementation `show (mid model)`.
+`ModelId` is doing double duty, it is the name of the type, as well as the name of the constructor function. For `newtype`s both have to be same. The constructor can take in only a single input parameter, in this case of type `Integer`, which is the only property of this type.
+
+In the `deploy` function I don't need to do anything with the value contained in the model Id, so I can define it in terms of the variable. Lets take another example -
+
+```haskell
+newtype Offset = Offset Integer
+
+write :: Integer -> Offset -> String -> String
+```
+
+Implementing `write` like this will not work because `offset` is of type `Offset` which does not have any Arithmetic operators defined on it.
+
+```haskell
+-- WRONG - will not work!
+write base offset msg = replicate (fromInteger (base + offset)) ' ' ++ msg
+```
+
+Instead I have to use the constructor syntax to "pull" out the value from inside the `Offset` type -
+
+```haskell
+write base (Offset offset) msg = replicate (fromInteger (base + offset)) ' ' ++ msg
+```
+
+I can also define the `newtype` with a named property -
+
+```haskell
+newtype Offset = Offset { offset :: Integer }
+```
+
+Now if I have a `Offset` value, I can pull the property using the property syntax like so -
+
+```haskell
+ghci> newtype Offset = Offset { offset :: Integer } deriving (Show)
+ghci> x = Offset 10
+ghci> offset x
+10
+```
+
+I can use this same thing inside functions as well, so we can go to our previously wrong definition of `write` and correct it like this -
+
+```haskell
+write base x msg = replicate (fromInteger (base + offset x)) ' ' ++ msg
+```
 
 ### Nullary Types
 
-These are like enums in other languages. When a data type has a bunch of mutually exclusive choices, I can use this type.
+These are like enums. When a data type has a bunch of mutually exclusive choices, I can use this type -
 
 ```haskell
 data Color = Red | Green | Blue
@@ -291,11 +365,11 @@ showColor Red = "This is red"
 showColor Green = "This is green"
 showColor Blue = "This is blue"
 
-displayColor :: Color -> (Int, Int, Int)
+displayColor :: Color -> (Integer, Integer, Integer)
 displayColor color = case color of
-  Red -> (255, 0, 0)
-  Green -> (0, 255, 0)
-  Blue -> (0, 0, 255)
+	Red -> (255, 0, 0)
+	Green -> (0, 255, 0)
+	Blue -> (0, 0, 255)
 ```
 
 These functions can be called like so -
@@ -306,28 +380,28 @@ ghci> favorite = Red
 ghci> showColor favorite
 "This is red"
 
--- Call function with a "literal"
+-- Call function with a literal value
 ghci> displayColor Red
-(255,0,0)
+(255, 0, 0)
 ```
 
 ### Sum Types
 
-These are types that are composed of other types, but their domain is the sum of the domains of the other types.
+These are types that are composed of other types, but their domain is the sum of the domains of other types.
 
 ```haskell
-data Result = Error String | Ok Int
+data Result = Error String | Ok Integer
 ```
 
-Here `Result`'s domain is the sum of the domains of `String` and `Int` because it can be either one of those values but not both at the same time. These can be used in functions like so -
+Here `Result` can take any value from the set of Strings or the set of Integers, but not both at the same time. 
 
 ```haskell
-addPositives :: Int -> Int -> Result
+addPositives :: Integer -> Integer -> Result
 addPositives x y =
-  if x > 0 && y > 0
-    then Ok (x + y)
-    else Error "Can only add positive numbers!"
-
+	if x > 0 && y > 0
+		then Ok (x + y)
+		else Error "Both x and y need to be strictly positive!"
+		
 -- With pattern matching
 showResult :: Result -> String
 showResult (Ok value) = show value
@@ -816,8 +890,4 @@ func :: Singleton a => a -> Float
 ```
 
 > `Either` is special in that I can only implement any typeclasse for only `Right` and not `Left`. Had I defined the singleton method like `singleton = Left` I'd have gotten a compile error.
-
-
-
-
 

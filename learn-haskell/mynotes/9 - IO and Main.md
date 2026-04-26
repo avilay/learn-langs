@@ -21,6 +21,8 @@ main :: IO ()
 main = putStrLn "Hello World!"
 ```
 
+Now, `main` looks a container value that wraps the unit type with an `IO` container. But that is not all that it is. The Haskell runtime treats it specially - it looks for a value named `main` of type `IO ()` and **executes** it. That execution step is outside the language itself. `IO ()` means an "IO action that, when executed produces nothing (the unit type)". The `IO` wrapper is saying: *this value carries a side effect, and I am tracking that in the type system*. A pure function can never return `IO ()`. Lets compare this to other containers we have seen so far - `Maybe`. With `Maybe` the wrapping represents *data* - a value that might be absent. With `IO`, the wrapping represents a *suspended action* - something that will happen when the runtime runs it. The reason `main` and `IO` tends to break my intuition is because so far I have seen functions that **do** things. But `main` just is, its the runtime that is doing.
+
 What if I want to print to stdout two times? Just writing `putStrLn` twice is not going to work because `main` is after all just a Haskell function. I can try something like this -
 
 ```haskell
@@ -93,5 +95,13 @@ findnFrequent :: Map Text Int -> Maybe (Text, Int)
 displayResult :: Maybe (Text, Int) -> Text
 
 putStrLn :: Text -> IO ()
+
+main = do
+	contents <- readFile "myfile.txt"
+	let counts = countWords contents
+	let common = findnFrequent counts
+	let result = displayResult common
+	putStrLn result
+	
 ```
 

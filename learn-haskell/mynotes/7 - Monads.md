@@ -73,6 +73,50 @@ func2 v1 = Container v2
 func3 v2 = Container v3
 ```
 
+Usually the left-most expression is also a function applied to some argument -
+
+```haskell
+func0 x >>= func1
+```
+
+Lets say `func0 x = Container v0` then -
+
+```haskell
+func0 x >>= func1
+= Container v0 >>= func1
+= func1 v0
+```
+
+The main difference between a functors `map` function and a Monad's bind operator is that the functor can be used to chain functions that take in "raw" inputs and return "raw" inputs, whereas Monads can be used to chain functions that take in "raw" inputs but return "wrapped" values. Lets take the following illustrative example:
+
+```haskell
+reciprocal :: Int -> Maybe Float
+reciprocal 0 = Nothing
+reciprocal n = Just (1.0 / fromIntegral n)
+
+format :: Float -> Maybe String
+format f
+    | f > 1.0   = Nothing
+    | otherwise = Just ("Value: " ++ show f)
+```
+
+With Functors I cannot chain these two functions, because `reciprocal` returns a `Maybe` but `format` accepts a `Float`. This is where bind shines.
+
+```
+result = Just 4 >>= reciprocal >>= format
+```
+
+Of course, in reality there will be a mix of such functions and as such I'll have to mix and match using Functors and Monads. Of course if my functions already take in wrapped values, then I don't need eitehr Functors or Monads. Both these exist specifically to solve the impedence mismatch between functions that expect raw values and a pipeline that's carrying wrapped values. The moment my function already speaks the wrapped type, there is no mismatch to solve. The practical takeaway is a simple decision tree at each step in the chain:
+
+```
+What does the next function look like?
+
+  A -> B                use a functor map
+  A -> Maybe B          use a monad bind
+  Maybe A -> B          just call it directly, pass the wrapped value
+  Maybe A -> Maybe B    just call it directly, pass the wrapped value
+```
+
 #### and-then operator
 
 The and-then operator looks a bit silly on first glance, it just takes in two containers containing different types, and returns the second container type. Just like the bind operator, it first tries to unbox the left container, if it is empty that is returned, otherwise it returns the right container.
@@ -180,13 +224,28 @@ class Functor f => Applicative f where
 	(<*>) :: f (a -> b) -> f a -> f b
 	
 class Applicative m => Monad m where
-	return :: a -> m a
-	return = pure  -- default implementation of return is just calling pure
-	
 	(>>=) :: m a -> (a -> m b) -> m b
+	(>>) :: m a -> m b -> m b
+	return :: a -> m a
+	return = pure -- default implementation of return is just calling pure
+{-# MINIMAL (>>=) #-}	
 ```
 
 These days everyone uses `pure` instead of `return`. 
+
+The `<*>` function in the `Applicative` typeclass is interesting, it takes a function wrapped inside a container and applies it to the values wrapped inside the container, and returns the result wrapped in the same container.
+
+```haskell
+ghci> addThree x = x + 3
+ghci> Just addThree <*> Just 2
+Just 5
+```
+
+```haskell
+ghci> timesTwo x = x * 2
+ghci> [addThree, timesTwo] <*> [1, 2, 3]
+[4,5,6,2,4,6]
+```
 
 ## do-notation
 
@@ -208,7 +267,7 @@ f x = do
   h y
 ```
 
-In the do-notation implementation, in the third line it seems as if `h` is being called with `y` as its argument, but that cannot be possible because `h :: a -> t a`. In reality, `h` is being called with whatever is contained inside `y` as the argument. `y` itself is of type `y :: t a`. 
+In the do-notation implementation, in the third line it seems as if `h` is being called with `y` as its argument, but that cannot be possible because `h` has the contained (raw) type as its input argument, `h :: a -> t a`. In reality, `h` is being called with whatever is contained inside `y` as the argument. `y` itself is a container of type `y :: t a`. 
 
 > The `<-` is an indication that `y` can now be used with the "do magic" where if it is used as an argument in any function, "do magic" will extract the value inside its container and pass it as the real argument to the function. Like `h` takes in `a` but is given `t a`. "Do magic" will extract `a` out of `t a` and pass it to `h`.
 

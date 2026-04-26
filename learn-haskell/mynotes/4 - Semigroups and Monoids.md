@@ -2,7 +2,7 @@
 
 ## Semigroup
 
-`Semigroup` has a single binary method `<>`. This must obey the mathematical rule of associativity that is not really encforceable in Haskell -
+`Semigroup` is a typeclass has a single binary method `<>`. This must obey the mathematical rule of associativity that is not really encforceable in Haskell -
 $$
 a <> (b <> c) \equiv (a <> b) <> c
 $$
@@ -48,7 +48,7 @@ ghci> x <> y
 Any {getAny = True}
 ```
 
-There are a bunch of newtypes defined just so their semigroups can be implemented unambiguously. E.g., `Sum` and `Product`. But subtraction cannot be a semigroup because it is not associative.
+There are a bunch of newtypes defined just so their semigroups can be implemented unambiguously. E.g., for numbers both addition and multiplication are good candidates for `<>`, so there are `Sum` and `Product` types. Subtraction cannot be a semigroup because it is not associative.
 
 ```haskell
 newtype Sum a = Sum {getSum :: a}

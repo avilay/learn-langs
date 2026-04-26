@@ -158,7 +158,7 @@ ghci> foldl (\acc x -> acc + x) 0 [1, 2, 3]
 6
 ```
 
-But subtraction is not so we get different results -
+But subtraction is not, so we get different results -
 $$
 R(-, 0, [1, 2, 3]) = 1 - (2 - (3 - 0)) = 1 - (2 - 3) = 1 - -1 = 2 \\
 L(-, 0, [1, 2, 3]) = ((0 - 1) - 2) - 3 = (-1 - 2) - 3 = -3 - 3 = -6

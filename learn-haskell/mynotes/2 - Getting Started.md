@@ -242,7 +242,7 @@ areSame :: Int -> Int -> Bool
 areSame x x = True
 areSame _ _ = False
 ```
-Will flat out result in a syntax error in the second line because I am try to use the same variable name for two different values.
+Will flat out result in a syntax error in the second line because I am trying to use the same variable name for two different values.
 
 ##### Incomplete Patterns
 A function is **total** if it is defined for all possible input patterns, otherwise it is called **partial**. A common implementation error is to leave a function as partial. The Haskell compiler offers a good way to check this. Lets define a partial function in Example.hs -
@@ -274,7 +274,7 @@ Example.hs:17:1: warning: [-Wincomplete-patterns]
 
 ### Function Composition
 
-In math we rhave function compositions like $(f \circ g)(x) \equiv f(g(x))$. Haskell has a similar operator `.` which works as `(f . g) x = f (g x)`. Just like in λ-calculus, function composition are right associative, i.e., `(f. g. h) x = f (g (h x))`.  As with everything in Haskell, the dot-operator `.` is just a function `(.)` which is implemented as follows -
+In math we have function compositions like $(f \circ g)(x) \equiv f(g(x))$. Haskell has a similar operator `.` which works as `(f . g) x = f (g x)`. Just like in λ-calculus, function composition are right associative, i.e., `(f. g. h) x = f (g (h x))`.  As with everything in Haskell, the dot-operator `.` is just a function `(.)` which is implemented as follows -
 
 ```haskell
 (.) :: (b -> c) -> (a -> b) -> a -> c
@@ -318,7 +318,7 @@ Here is a more complex example -
 ```haskell
 -- takes in a list of lists and returns the first 5 lists which have an even length
 takeEven5 :: [[a]] -> [[a]]
-takeEven5 lists = take 5 (fliter (\list -> even (length list)) lists)
+takeEven5 lists = take 5 (filter (\list -> even (length list)) lists)
 
 -- Contrary to first impressions, I cannot η-reduce lists just yet because in order to do that I should have 
 -- f x = g x
