@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../learn-dist-sys/learn-pydantic"
+		},
+		{
+			"path": "../../learn-misc/learn-click"
+		},
+		{
+			"path": "../../learn-ai-act-1/learn-scipy"
+		},
+		{
+			"path": "../../../scratch/py"
+		}
+	],
+	"settings": {}
+}

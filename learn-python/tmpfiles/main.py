@@ -10,8 +10,10 @@ NamedTemporaryFile: Behaves like a regular file if set the `delete=False` option
 drawback with using this option is that I have to remember to delete the file. Which defeats the purpose
 of using something like this in the first place.
 """
-import tempfile
+
+import os
 import os.path as path
+import tempfile
 
 
 def read_from_tempfile(fh):
@@ -40,13 +42,16 @@ def read_from_named_tempfile(filename):
 
 
 def learn_named_tempfile():
-    with tempfile.NamedTemporaryFile(delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="wt", delete=False) as f:
         print(f"Opened named temporary file {f.name}.")
         input("Check if you can see this on the filesystem.")
-        f.write(b"Still only bytes!\n")
-        f.write(b"Not string.\n")
+        # f.write(b"Still only bytes!\n")
+        # f.write(b"Not string.\n")
+        f.write("This is a string, not bytes!\n")
+        f.write("More strings!\n")
 
     read_from_named_tempfile(f.name)
+    os.unlink(f.name)  # Clean up the file manually
 
 
 def read_file(filename):
@@ -77,7 +82,6 @@ def verify_tmpdir_scope():
 
 
 # learn_tempfile()
-# learn_named_tempfile()
+learn_named_tempfile()
 # learn_tempdir()
-verify_tmpdir_scope()
-
+# verify_tmpdir_scope()

@@ -1,8 +1,10 @@
+# type: ignore
 
-#%%
+
 class Cake:
     def bake(self):
-        print('Cake::bake')
+        print("Cake::bake")
+
 
 def cut(self):
     print("cutting a something with icing and frosting")

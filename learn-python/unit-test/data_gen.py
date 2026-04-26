@@ -4,15 +4,15 @@ from user import User
 
 class DataGenerator:
     def __init__(self):
-        self._user = User(username='happy', password='orange')
-        self._user._bookmarks.append('http://www.avilaylabs.net')
-        self._user._bookmarks.append('http://www.microsoft.com')
+        self._user = User(username="happy", password="orange")
+        self._user._bookmarks.append("http://www.avilaylabs.net")
+        self._user._bookmarks.append("http://www.microsoft.com")
         self._dead_links = [
-            'http://avilayparekh.com',  # The domain does not exist
-            'http://avilaylabs.net/funnypage'  # The URL does not exist
+            "http://avilayparekh.com",  # The domain does not exist
+            "http://avilaylabs.net/funnypage",  # The URL does not exist
         ]
-        self._live_link = 'http://www.google.com'
-        self._bad_link = 'hahaha'
+        self._live_link = "http://www.google.com"
+        self._bad_link = "hahaha"
 
     def get_user(self):
         return self._user

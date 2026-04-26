@@ -1,15 +1,16 @@
-# Typing Notes
+# Python Typing Notes
 
 ## Basics
 
 ```python
 def my_function(a: int, b: str = "default value") -> float:
-  # redundant type annotating on x and flag, it can be easily inferred that it is an int and a bool
-  # respectively. But good practice (as per APTG)
+  # redundant type annotating on x and flag, it can be easily inferred that 
+  # it is an int and a bool respectively. But good practice (as per APTG)
   x: int = 1
   flag: bool = a < 100
   
-  # I don't have to have a default value at the time of declaration, I can defer assignment to later.
+  # I don't have to have a default value at the time of declaration, I can defer 
+  # assignment to later.
   no_default_val: int
   :::
   no_default_val = 10
@@ -136,9 +137,9 @@ def bake(dessert: Cookie | Cake | type[Cookie] | type[Cake]) -> None:
     if callable(dessert):
         # This is a constructor
         if issubclass(dessert, Cookie):
-            sweet = Cookie("Chocolate Chip", 200)
+            sweet = dessert("Chocolate Chip", 200)
         elif issubclass(dessert, Cake):
-            sweet = Cake(2, "Vanilla")
+            sweet = dessert(2, "Vanilla")
     else:
         if isinstance(dessert, Cookie):
             sweet = dessert
@@ -469,7 +470,7 @@ class Point(NamedTuple):
 
 ## Literals and Typed Dicts
 
-> APTG: I consider usage of these as a bad code smell. If I see code that uses these or am thinking of using these myself, there are other better ways to express my types. I have seen Pydantic use Literal, so let me learn about these.
+> APTG: I consider usage of these as a bad code smell. If I see code that uses these or am thinking of using these myself, there are other better ways to express my types. Instead of Literals I can use enums. Instead of TypedDict I can use a custom `BaseModel` class. Typescript also has Literals and something called a `Record` type which is equivalent to `TypedDict`. It makes sense there because apparently enums in Javascript/Typescript are badly implemented, and "everything is an object" can make things confusing. I have seen Pydantic use Literal, so let me learn about these.
 
 ### Literals
 
@@ -599,6 +600,8 @@ class Derived(Base):
 
 ## Generics
 
+> Jul 13, 2025: This entire section is a mess. It is correct, but badly organized.
+
 ### Syntax
 
 Here is a very simple generic class templated by type `T`.
@@ -672,8 +675,6 @@ first[int]((1, 2))  # Syntax error
 
 ### Upper Bounds
 
-
-
 ### Functions - Protocols, Generics, and Generic Protocols
 
 When a function takes in a concrete type, everything is simple.
@@ -703,7 +704,7 @@ def does_not_exist[T](arg: T) -> None:
 
 This is because I want `T` to behave in a some specific way inside the function. And that behavior is defined as some operator or method that it supports, or that it is a subtype of some other type that have the desired properties that are needed in this function's implementation. If it is just some attributes - methods or instance properites - I can make `arg` an instance of a `Protocol`. If I want `arg` to be of a specific type or its subtypes then I just make `arg` be of that type. For example if I make `arg` of type `MediaPlayer`, then `MediaPlayer` and all its subtypes will work.
 
-> The function itself is contravariant, i.e., if I have a function `Base -> None` then I cannot replace its usage with `Derived -> None`. But I can totally call this function with `Dervied` instead of `Base` because the argument is covariant.
+> The function itself is contravariant, i.e., if I have a function `Base -> None` then I **cannot** replace its usage with `Derived -> None`. But I can totally call this function with `Dervied` instead of `Base` because the argument is covariant.
 
 These kinds of bare templated examples are given in C++. Some common examples in C++ we see are -
 
@@ -722,7 +723,7 @@ class Ordered(Protocol):
   def __lt__[T](self: T, other: T, /) -> bool: ...
 	
 def max[T: Ordered](a: T, b: T) -> T
-  return a if a > b else 
+  return a if a > b else b
 ```
 
 Another common C++ template example is - 
@@ -885,10 +886,6 @@ do_set(First())
 do_set(Second())  # type error!
 ```
 
-
-
-
-
 ## Type Variance
 
 ![type_variance](./imgs/type_variance.png)
@@ -998,7 +995,7 @@ def deco_maker[F: Callable[..., Any]](arg1: str, arg2: int) -> Callable[[F], F]:
 
 #### Protocols
 
-This is a fancy way of saying duck-typing with static types. Here is a classic duck-typing scenario. Lets say we have a function to prepare desserts that can take in any object that has a `.bake()` method defined on it. 
+This is a fancy way of saying duck-typing at compile time with static types. Here is a classic duck-typing scenario. Lets say we have a function to prepare desserts that can take in any object that has a `.bake()` method defined on it. 
 
 ```python
 def prepare_dessert(sweet) -> None:
@@ -1063,7 +1060,7 @@ def average(pool, *vecs: list[float]) -> float:
 
 How to annotate `pool`? There is no syntax like `Callable[[*list[float]], list[float]]`. Instead, I can create a callable `Protocol` class with the right function signature.
 
-> `Callable[[input_type_1, input_type_2], output_type]` is used to annotate a function. Lets say I have a function that takes in string and an int and returns a Cookie object -
+> `Callable[[arg_1, arg_2], return_type]` is used to annotate a function. Lets say I have a function that takes in string and an int and returns a Cookie object -
 >
 > ```python
 > def create(flavor: str, calories: int) -> Cookie:
@@ -1136,6 +1133,33 @@ T = TypeVar("T")
 class Bakeable(Protocol[T]):
   def bake(self) -> T: ...
 ```
+
+Another related example that I cannot find a good place to fit -
+
+```python
+@dataclass
+class Box:
+  contents: str = ""
+
+  def set_contents[T: Box](self: T, val: str) -> T:
+    self.contents = val
+    return self
+      
+@dataclass
+class ClearableBox(Box):
+  def clear(self) -> None:
+    self.contents = ""      
+    
+box = ClearableBox()
+
+# box is still an instance of ClearableBox
+box = box.set_contents("Hello")
+
+# this is type correct
+box.clear()
+```
+
+
 
 #### Runtime Checks
 

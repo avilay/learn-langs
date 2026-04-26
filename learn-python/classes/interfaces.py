@@ -1,3 +1,4 @@
+# type: ignore
 """
 TL;DR: If an ABC does not define an abstract method it does not add much value.
 
@@ -9,18 +10,17 @@ instance of Cake, will accept the registered fake Cake subclass. In most cases o
 I'll not need to do this.
 """
 
-#%%
 from abc import ABC, abstractmethod
+
 
 class Cake(ABC):
     def bake(self):
-        print('Cake::bake')
+        print("Cake::bake")
 
 
 cake = Cake()
 cake.bake()
 
-#%%
 """
 When an ABC has an abstract method defined it cannot be instantiated directly. In the example
 below Cookie cannot be instantiated directly because it has an abstract method on it. A subclass
@@ -29,11 +29,12 @@ the method name and not the method signature. ChocolateCake has a method called 
 signature is not the same as the abstract method eat. But ABC will still allow the class to be
 instantiated.
 """
-#%%
+
+
 class Cookie(ABC):
     @abstractmethod
     def eat(self, n):
-        print(f'ICookie::eat {n}')
+        print(f"ICookie::eat {n}")
 
 
 # Cannot be instantiated because it has an abstract method
@@ -45,10 +46,10 @@ except TypeError as te:
 
 class ChocolateChipCookie(Cookie):
     def bake(self):
-        print('ChocolateChip::bake')
+        print("ChocolateChip::bake")
 
     def eat(self):
-        print('ChocolateChipCookie::eat')
+        print("ChocolateChipCookie::eat")
 
 
 # Can be instantiated even though its eat method does not have the same signature as the abstract
@@ -57,10 +58,34 @@ cc = ChocolateChipCookie()
 cc.eat()
 
 
-class SnickerDoodle(Cookie): pass
+class SnickerDoodle(Cookie):
+    pass
 
 
 try:
     sd = SnickerDoodle()  # Cannot instantiate because it has not implemented eat
 except TypeError as te:
     print(te)
+    print(te)
+    print(te)
+    print(te)
+
+"""
+Instead of using abstract class use protocol.
+"""
+# Use protocols
+import Protocol  # noqa
+
+
+class Cookie(Protocol):
+    def bake(self):
+        pass
+
+    def serve(self):
+        pass
+        pass
+        pass
+        pass
+        pass
+        pass
+        pass
