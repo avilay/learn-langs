@@ -141,12 +141,6 @@ int main() {
 }
 ```
 
-
-
-
-
-
-
 ## Constants
 
 If the type is a non-pointer type, then the usage of `const` is fairly easy.
@@ -231,7 +225,7 @@ const int OUT_OF_MEMORY_ERROR = -1;
 const int UNKOWN_ERROR = -2;
 const int OK = 1;
 ```
-Now `array.h` is included in multiple .c files in my project. When a .c file is compiled into a .o file, these ints are defined in the .o file. When it comes time to link all the .o files where these ints are defined, it leads to a linker (`ld`) error because the linker is confused by seeing multipled definitons of the same ints. At any rate, I am moving this declaration into `array.c` to avoid this error. But then how does the caller what a particular error means?
+Now `array.h` is included in multiple .c files in my project. When a .c file is compiled into a .o file, these ints are defined in the .o file. When it comes time to link all the .o files where these ints are defined, it leads to a linker (`ld`) error because the linker is confused by seeing multipled definitons of the same ints. At any rate, I am moving this declaration into `array.c` to avoid this error. But then how does the caller know what a particular error means?
 
 **Questions**:
   1. Why doesn't the linker complain about the duplicate function or struct definitions?
@@ -239,6 +233,8 @@ Now `array.h` is included in multiple .c files in my project. When a .c file is 
   3. If it code files, how does the caller know what a particular int means? Documentation?
 
 I think these are defined as macros in the header file. Let me try that.
+
+> Update: Isn't that why we use the `#pragma once` macro?
 
 ### Rethink Design
 
