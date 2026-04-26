@@ -1,0 +1,93 @@
+#lang slideshow
+(define c (circle 10))
+(define r (rectangle 10 20))
+
+(define (square n)
+  ; Create a filled square
+  (filled-rectangle n n))
+
+(define (four p)
+  (define two-p (hc-append p p))
+  (vc-append two-p two-p))
+
+(define (sq)
+  (filled-rectangle 10 10))
+
+(define (checker p1 p2)
+  (let ([p12 (hc-append p1 p2)]
+        [p21 (hc-append p2 p1)])
+    (vc-append p12 p21)))
+
+(define (checkerboard p)
+  (let* ([rp (colorize p "red")]
+         [bp (colorize p "black")]
+         [c (checker rp bp)]
+         [c4 (four c)])
+    (four c4)))
+
+(define (series mk)
+  (hc-append 4 (mk 5) (mk 10) (mk 20)))
+
+; This is just shorthand for -
+; (define series
+;   (lambda (mk)
+;     (hc-append 4 (mk 5) (mk 10) (mk 20))))
+
+(define (rgb-series mk)
+  (vc-append
+   (series (lambda (sz) (colorize (mk sz) "red")))
+   (series (lambda (sz) (colorize (mk sz) "green")))
+   (series (lambda (sz) (colorize (mk sz) "blue")))))
+
+(define (rgb-maker mk)
+  (lambda (sz)
+    (vc-append (colorize (mk sz) "red")
+               (colorize (mk sz) "green")
+               (colorize (mk sz) "blue"))))
+
+(define (rainbow p)
+  (map (lambda (color) (colorize p color))
+       (list "red" "orange" "yellow" "green" "blue" "purple")))
+
+
+; If I want to pass the output of rainbow to vc-append
+; I cannot do it directly because in Pythonic terms
+; def vc_append(*shapes): ...
+; and rainbow returns a list. In Python I'd do something
+; like -
+; vc_append(*rainbow(square(5)))
+; But there is no unroll op in lisp, so we use the apply
+; function
+(apply vc-append (rainbow (square 5)))
+
+
+; To import a module use the require keyword
+(require pict/flash)
+(colorize (filled-flash 40 30) "yellow")
+
+(define (abs x)
+  (if (< x 0) (- x) x))
+
+(define (check-number x)
+  (cond ((< x 10) "Too Low!")
+        ((= x 10) "Just right.")
+        (else "Too high!")))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
